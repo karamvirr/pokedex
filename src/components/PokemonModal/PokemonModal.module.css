@@ -1,0 +1,57 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0)
+  );
+  --blur: 15px;
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+}
+
+.modal {
+  position: fixed;
+  background-color: white;
+  top: 20vh;
+  width: 80%;
+  left: 10%;
+  right: auto;
+  transform: translate(-50%, -50%);
+  padding: 1em;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  animation: slide-up 300ms ease-out forwards;
+}
+
+.content {
+}
+
+.sprite {
+}
+
+.information {
+}
+
+/* @media (min-width: 768px) {
+  .modal {
+    width: 40rem;
+    left: calc(50% - 20rem);
+  }
+} */
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(3em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
