@@ -39,6 +39,22 @@ const getTypeColor = type => {
   }
 };
 
+const hectogramsToPounds = hectograms => {
+  return hectograms / 4.536;
+};
+
+const hectogramsToKilograms = hectograms => {
+  return hectograms / 10;
+};
+
+const decimetersToFeet = decimeters => {
+  return decimeters / 3.048;
+};
+
+const decimetersToMeters = decimeters => {
+  return decimeters / 10;
+};
+
 const titleCase = text => {
   if (text === '') {
     return text;
@@ -46,4 +62,11 @@ const titleCase = text => {
   return text[0].toUpperCase() + text.slice(1);
 };
 
-export { getTypeColor, titleCase };
+export {
+  getTypeColor,
+  titleCase,
+  hectogramsToPounds,
+  hectogramsToKilograms,
+  decimetersToFeet,
+  decimetersToMeters
+};

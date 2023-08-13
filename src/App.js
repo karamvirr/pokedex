@@ -6,16 +6,26 @@ import { useState } from 'react';
 import PokemonModal from './components/PokemonModal/PokemonModal';
 
 const App = () => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalData, setModalData] = useState({});
 
   const showModalHandler = pokemonData => {
-    console.log('data', pokemonData);
-    setModalIsOpen(true);
+    setModalData(pokemonData);
   };
+
+  const dismissModalHandler = () => {
+    setModalData({});
+  };
+
+  const modalIsOpen = Object.keys(modalData).length > 0;
 
   return (
     <div className={classes.App}>
-      {modalIsOpen && <PokemonModal onClose={() => setModalIsOpen(false)} />}
+      {modalIsOpen && (
+        <PokemonModal
+          data={modalData}
+          onClose={dismissModalHandler}
+        />
+      )}
       <Header />
       <PokemonList onShowModal={showModalHandler} />
     </div>
