@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { titleCase, getTypeColor } from '../../utils';
 
 import classes from './PokemonCard.module.css';
+import Card from '../UI/Card';
 
 const PokemonCard = props => {
   const [name, setName] = useState('');
@@ -32,11 +33,11 @@ const PokemonCard = props => {
   ));
 
   return (
-    <div
+    <Card
+      className={classes.PokemonCard}
       onClick={() => {
         props.onShowModal(data);
-      }}
-      className={classes.PokemonCard}>
+      }}>
       <div className={classes.information}>
         <p>#{props.id}</p>
         <h2>{titleCase(name)}</h2>
@@ -49,7 +50,7 @@ const PokemonCard = props => {
           alt={`${name} sprite`}
         />
       </div>
-    </div>
+    </Card>
   );
 };
 

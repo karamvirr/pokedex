@@ -1,22 +1,8 @@
 .PokemonCard {
   display: flex;
   flex-direction: row;
-  padding: 0 1em;
-  border: 2px solid purple;
+  height: 175px;
   cursor: pointer;
-  border-radius: 4px;
-  box-shadow: 0 8px 6px -6px lightgray;
-}
-
-.pokemon-id {
-  color: black;
-}
-
-.pokemon-sprite {
-  object-fit: contain;
-  width: 100%;
-  height: 75%;
-  border: 2px solid green;
 }
 
 .information,
@@ -24,48 +10,29 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 50%;
 }
 
-.information {
-  border: 2px solid blue;
-  width: 60%;
+.information,
+.types {
   gap: 0.5em;
-}
-
-.sprite {
-  border: 2px solid red;
-  width: 40%;
 }
 
 .types {
   display: flex;
-  flex-direction: column;
-  gap: 0.25em;
+  flex-direction: row;
   color: white;
+  flex-wrap: wrap;
 }
 
 .type {
-  border-radius: 5%;
-  font-weight: bold;
+  border-radius: 4px;
   width: min-content;
   padding: 0.5em;
 }
 
-/* .PokemonCard {
-  padding: 0.5em;
-  border: 1px solid darkgray;
-  box-shadow: 16px 16px 8px -8px lightgray;
-  background-color: white;
-  cursor: pointer;
+.pokemon-sprite {
+  object-fit: contain;
+  width: 100%;
+  height: 75%;
 }
-
-.PokemonCard img {
-  --size: 15em;
-  height: var(--size);
-  width: var(--size);
-}
-
-.name {
-  text-align: center;
-}
-*/
