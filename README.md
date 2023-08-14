@@ -1,8 +1,8 @@
 # Pokédex
 
-<img width="1440" alt="Screenshot 2023-08-13 at 11 08 55 AM" src="https://github.com/karamvirr/pokedex/assets/21179214/df13cfff-6098-43eb-9b39-1b49246e491e">
+<img width="1440" alt="Screenshot 2023-08-13 at 11 08 55 AM" src="https://github.com/karamvirr/pokedex/assets/21179214/b9447f2d-5066-40ad-8ad8-30de37dd9c1e">
 
-<img width="1422" alt="Screenshot 2023-08-13 at 5 04 45 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/a90811db-3326-43ee-88a5-890bcdd70a72">
+<img width="1423" alt="Screenshot 2023-08-13 at 5 12 28 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/8d6618c2-634f-4d14-b104-6625a80f2e5c">
 
 ### Usage
 
