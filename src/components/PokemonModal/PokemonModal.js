@@ -1,44 +1,51 @@
 import ReactDOM from 'react-dom';
 import classes from './PokemonModal.module.css';
 import { useState, useEffect } from 'react';
-import { titleCase } from '../../utils';
-const Backdrop = props => {
-  return (
-    <div
-      className={classes.backdrop}
-      onClick={props.onClick}></div>
-  );
-};
-
-const Overlay = props => {
-  return (
-    <div className={classes.modal}>
-      <div className={classes.content}>{props.children}</div>
-    </div>
-  );
-};
+import {
+  titleize,
+  decimetersToMeters,
+  decimetersToFeetAndInches,
+  hectogramsToPounds,
+  hectogramsToKilograms,
+  normalizeCaptureRate
+} from '../../utils';
+import Backdrop from '../UI/Backdrop';
+import Overlay from '../UI/Overlay';
+import Card from '../UI/Card';
+import PokemonStatBar from '../PokemonStatBar/PokemonStatBar';
 
 const portalElement = document.getElementById('overlays');
+
+const getTableRow = (label, ...args) => {
+  return (
+    <tr>
+      <td className={classes['row-label']}>{label}</td>
+      {args.map(arg => (
+        <td className={classes['row-data']}>{arg}</td>
+      ))}
+    </tr>
+  );
+};
+
+const computeHeightText = decimeters => {
+  const [feet, inches] = decimetersToFeetAndInches(decimeters);
+  return `${feet}' ${inches}" (${decimetersToMeters(decimeters)}m)`;
+};
+
+const computeWeightText = hectograms => {
+  const pounds = hectogramsToPounds(hectograms).toFixed(1);
+  const kilograms = hectogramsToKilograms(hectograms).toFixed(1);
+  return `${pounds} lbs (${kilograms} kg)`;
+};
 
 const PokemonModal = props => {
   const data = props.data;
 
   const [showShinySprite, setShowShinySprite] = useState(false);
   const [speciesData, setSpeciesData] = useState({});
-  const [evolutionChain, setEvolutionChain] = useState({});
 
   useEffect(() => {
-    if (speciesData.evolution_chain && speciesData.evolution_chain.url) {
-      fetch(speciesData.evolution_chain.url)
-        .then(response => response.json())
-        .then(data => {
-          setEvolutionChain(data);
-        })
-        .catch(console.log);
-    }
-  }, [speciesData]);
-  useEffect(() => {
-    if (data.species && data.species.url) {
+    if (data.species?.url) {
       fetch(data.species.url)
         .then(response => response.json())
         .then(data => {
@@ -51,14 +58,10 @@ const PokemonModal = props => {
   const imageUrl = showShinySprite
     ? data.sprites.other['official-artwork'].front_shiny
     : data.sprites.other['official-artwork'].front_default;
-
   const abilities = data.abilities
-    .map(ability => ability.ability.name)
+    .map(ability => titleize(ability.ability.name))
     .join(', ');
-  const types = data.types.map(type => type.type.name).join(', ');
-  const height = data.height;
-  const weight = data.weight;
-
+  const types = data.types.map(type => titleize(type.type.name)).join(', ');
   const stats = {
     hp: data.stats[0].base_stat,
     attack: data.stats[1].base_stat,
@@ -67,144 +70,99 @@ const PokemonModal = props => {
     'special-defense': data.stats[4].base_stat,
     speed: data.stats[5].base_stat
   };
+  const totalStats = Object.values(stats).reduce((a, b) => a + b, 0);
 
-  let summary = null;
+  let color = null;
+  let habitat = null;
+  let shape = null;
   let captureRate = null;
-  let nameJa = null;
-  if (speciesData.flavor_text_entries) {
-    summary = speciesData.flavor_text_entries
-      .filter(entry => entry.language.name === 'en')
-      .pop().flavor_text;
-    captureRate = speciesData.capture_rate;
-    nameJa = speciesData.names
+  let japaneseName = null;
+  let description = null;
+  if (Object.keys(speciesData).length > 0) {
+    color = speciesData.color.name;
+    habitat = speciesData.habitat.name;
+    captureRate = normalizeCaptureRate(speciesData.capture_rate);
+    shape = speciesData.shape.name;
+    japaneseName = speciesData.names
       .filter(entry => entry.language.name === 'ja')
       .pop().name;
+    description = speciesData.flavor_text_entries
+      .filter(entry => entry.language.name === 'en')
+      .pop().flavor_text;
   }
 
   const modalOverlayContent = (
     <>
       <div className={classes.sprite}>
+        <p>#{data.id}</p>
         <img
           onClick={() => setShowShinySprite(previousState => !previousState)}
           className={classes['pokemon-sprite']}
           src={imageUrl}
           alt={`${data.name} sprite`}
         />
-        <h1 className={classes.name}>{titleCase(data.name)}</h1>
-        {nameJa && <h2 className={classes.name}>{nameJa}</h2>}
-        <p style={{ textAlign: 'center', color: 'gray' }}>#{data.id}</p>
+        <h1>{titleize(data.name)}</h1>
+        {japaneseName && (
+          <h2 className={classes['japanese-name']}>{japaneseName}</h2>
+        )}
       </div>
       <div className={classes.information}>
-        <section>
-          <h3>About</h3>
-          <p>
-            <strong>Abilities:</strong>
-            <span>{abilities}</span>
-          </p>
-          <p>
-            <strong>Types:</strong>
-            <span>{types}</span>
-          </p>
-          <p>
-            <strong>Height:</strong>
-            <span>{height}</span>
-          </p>
-          <p>
-            <strong>Weight:</strong>
-            <span>{weight}</span>
-          </p>
-          {captureRate && (
-            <p>
-              <strong>Capture Rate:</strong>
-              <span>{captureRate}</span>
-            </p>
-          )}
+        <section className={classes.section}>
+          <h3 className={classes['section-header']}>About</h3>
+          <table>
+            {getTableRow('Species', titleize(data.species.name))}
+            {color && getTableRow('Color', titleize(color))}
+            {habitat && getTableRow('Habitat', titleize(habitat))}
+            {shape && getTableRow('Shape', titleize(shape))}
+            {getTableRow('Types', types)}
+            {getTableRow('Abilities', abilities)}
+            {getTableRow('Height', computeHeightText(data.height))}
+            {getTableRow('Weight', computeWeightText(data.weight))}
+            {captureRate && getTableRow('Capture Rate', `${captureRate}%`)}
+          </table>
         </section>
-        <section>
-          <h3>Stats</h3>
-          <div className={classes.stats}>
-            <div className={classes.stat}>
+        <section className={classes.section}>
+          <h3 className={classes['section-header']}>Base Stats</h3>
+          <table>
+            {getTableRow('HP', stats.hp, <PokemonStatBar value={stats.hp} />)}
+            {getTableRow(
+              'Attack',
+              stats.attack,
+              <PokemonStatBar value={stats.attack} />
+            )}
+            {getTableRow(
+              'Defense',
+              stats.defense,
+              <PokemonStatBar value={stats.defense} />
+            )}
+            {getTableRow(
+              'Special Attack',
+              stats['special-attack'],
+              <PokemonStatBar value={stats['special-attack']} />
+            )}
+            {getTableRow(
+              'Special Defense',
+              stats['special-defense'],
+              <PokemonStatBar value={stats['special-defense']} />
+            )}
+            {getTableRow(
+              'Speed',
+              stats.speed,
+              <PokemonStatBar value={stats.speed} />
+            )}
+            {getTableRow(
+              'Total',
               <p>
-                <strong>HP</strong>
+                <strong>{totalStats}</strong>
               </p>
-              <p>{stats.hp}</p>
-              <div className={classes['stat-bar']}>
-                <div
-                  className={classes['stat-bar-fill']}
-                  style={{ width: `${stats.hp}%` }}></div>
-              </div>
-            </div>
-          </div>
-          <div className={classes.stats}>
-            <div className={classes.stat}>
-              <p>
-                <strong>Attack</strong>
-              </p>
-              <p>{stats.attack}</p>
-              <div className={classes['stat-bar']}>
-                <div
-                  className={classes['stat-bar-fill']}
-                  style={{ width: `${stats.attack}%` }}></div>
-              </div>
-            </div>
-          </div>
-          <div className={classes.stats}>
-            <div className={classes.stat}>
-              <p>
-                <strong>Defense</strong>
-              </p>
-              <p>{stats.defense}</p>
-              <div className={classes['stat-bar']}>
-                <div
-                  className={classes['stat-bar-fill']}
-                  style={{ width: `${stats.defense}%` }}></div>
-              </div>
-            </div>
-          </div>
-          <div className={classes.stats}>
-            <div className={classes.stat}>
-              <p>
-                <strong>Special Attack</strong>
-              </p>
-              <p>{stats['special-attack']}</p>
-              <div className={classes['stat-bar']}>
-                <div
-                  className={classes['stat-bar-fill']}
-                  style={{ width: `${stats['special-attack']}%` }}></div>
-              </div>
-            </div>
-          </div>
-          <div className={classes.stats}>
-            <div className={classes.stat}>
-              <p>
-                <strong>Special Defense</strong>
-              </p>
-              <p>{stats['special-defense']}</p>
-              <div className={classes['stat-bar']}>
-                <div
-                  className={classes['stat-bar-fill']}
-                  style={{ width: `${stats['special-defense']}%` }}></div>
-              </div>
-            </div>
-          </div>
-          <div className={classes.stats}>
-            <div className={classes.stat}>
-              <p>
-                <strong>Speed</strong>
-              </p>
-              <p>{stats.speed}</p>
-              <div className={classes['stat-bar']}>
-                <div
-                  className={classes['stat-bar-fill']}
-                  style={{ width: `${stats.speed}%` }}></div>
-              </div>
-            </div>
-          </div>
+            )}
+          </table>
         </section>
-        <section>
-          <h3>Summary</h3>
-          <p>{summary}</p>
-        </section>
+        {description && (
+          <section className={classes.section}>
+            <p className={classes.description}>{description}</p>
+          </section>
+        )}
       </div>
     </>
   );
@@ -216,7 +174,9 @@ const PokemonModal = props => {
         portalElement
       )}
       {ReactDOM.createPortal(
-        <Overlay>{modalOverlayContent}</Overlay>,
+        <Overlay>
+          <Card className={classes.PokemonModal}>{modalOverlayContent}</Card>
+        </Overlay>,
         portalElement
       )}
     </>

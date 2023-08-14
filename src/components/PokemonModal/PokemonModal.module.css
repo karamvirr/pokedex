@@ -1,89 +1,53 @@
-.backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) rgba(255, 255, 255, 0)
-  );
-  --blur: 15px;
-  backdrop-filter: blur(var(--blur));
-  -webkit-backdrop-filter: blur(var(--blur));
-}
-
-.modal {
-  position: fixed;
-  background-color: white;
-  top: 20vh;
-  width: 80%;
-  left: 10%;
-  right: auto;
-  transform: translate(-50%, -50%);
-  padding: 1em;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  animation: slide-up 300ms ease-out forwards;
-}
-
-.content {
+.PokemonModal {
   display: flex;
   flex-direction: row;
-  border: 2px solid black;
-  padding: 2em;
+  padding: 1em; /* Override */
 }
 
+.information,
 .sprite {
-  border: 2px solid red;
-  flex-shrink: 1;
-}
-
-.name {
-  text-align: center;
-}
-
-h2 {
-  color: gray;
+  display: flex;
+  flex-direction: column;
 }
 
 .information {
-  border: 2px solid blue;
-  flex-grow: 1;
+  width: 60%;
+  padding: 1em;
 }
 
-.stat {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-  gap: 1em;
+.sprite {
+  justify-content: center;
+  width: 40%;
+  text-align: center;
 }
-
-.stat-bar {
-  width: 200px;
-  height: 1em;
-  border-radius: 12px;
-  background-color: lightgray;
-}
-
-.stat-bar-fill {
-  height: 100%;
-  border-radius: 12px;
-  background-color: green;
-}
-
-/* @media (min-width: 768px) {
-  .modal {
-    width: 40rem;
-    left: calc(50% - 20rem);
-  }
-} */
 
 .pokemon-sprite {
+  object-fit: contain;
   animation: breathing 5s infinite;
   cursor: pointer;
+  padding: 1em;
+}
+
+.japanese-name,
+.description {
+  color: gray;
+}
+
+.row-label {
+  padding-right: 2.5em;
+  color: gray;
+}
+
+.row-data {
+  padding-right: 1.25em;
+}
+
+.section-header {
+  margin-bottom: 0.5em;
+}
+
+.section {
+  margin-bottom: 1em;
 }
 
 @keyframes breathing {
@@ -93,26 +57,6 @@ h2 {
   }
   50% {
     transform: scale(1.05);
-  }
-}
-
-@keyframes rotate {
-  0%,
-  100% {
-    transform: rotateY(0);
-  }
-  50% {
-    transform: rotateY(5deg);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
   }
 }
 

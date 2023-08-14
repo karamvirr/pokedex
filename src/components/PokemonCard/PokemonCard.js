@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { titleCase, getTypeColor } from '../../utils';
+import { titleize, getTypeColor } from '../../utils';
 
 import classes from './PokemonCard.module.css';
 import Card from '../UI/Card';
@@ -40,7 +40,7 @@ const PokemonCard = props => {
       }}>
       <div className={classes.information}>
         <p>#{props.id}</p>
-        <h2>{titleCase(name)}</h2>
+        <h2>{titleize(name)}</h2>
         <div className={classes.types}>{typeCards}</div>
       </div>
       <div className={classes.sprite}>

@@ -51,22 +51,42 @@ const decimetersToFeet = decimeters => {
   return decimeters / 3.048;
 };
 
+const decimetersToInches = decimeters => {
+  return decimeters / 2.54;
+};
+
+const decimetersToFeetAndInches = decimeters => {
+  const feet = Math.round(decimetersToFeet(decimeters));
+  const inches = Math.round(decimetersToInches(decimeters));
+
+  return [feet, inches];
+};
+
 const decimetersToMeters = decimeters => {
   return decimeters / 10;
 };
 
-const titleCase = text => {
+const titleize = text => {
   if (text === '') {
     return text;
   }
   return text[0].toUpperCase() + text.slice(1);
 };
 
+// this function normalizes the capture rate to a percentage.
+// for the given capture rate, 255 is the highest capture rate, and
+// 0 is the lowest.
+const normalizeCaptureRate = captureRate => {
+  return ((captureRate / 255) * 100).toFixed(1);
+};
+
 export {
   getTypeColor,
-  titleCase,
+  titleize,
   hectogramsToPounds,
   hectogramsToKilograms,
   decimetersToFeet,
-  decimetersToMeters
+  decimetersToMeters,
+  decimetersToFeetAndInches,
+  normalizeCaptureRate
 };
