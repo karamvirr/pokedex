@@ -16,12 +16,16 @@ import PokemonStatBar from '../PokemonStatBar/PokemonStatBar';
 
 const portalElement = document.getElementById('overlays');
 
-const getTableRow = (label, ...args) => {
+const generateTableRow = (label, ...args) => {
   return (
     <tr>
       <td className={classes['row-label']}>{label}</td>
       {args.map(arg => (
-        <td className={classes['row-data']}>{arg}</td>
+        <td
+          key={arg}
+          className={classes['row-data']}>
+          {arg}
+        </td>
       ))}
     </tr>
   );
@@ -80,7 +84,7 @@ const PokemonModal = props => {
   let description = null;
   if (Object.keys(speciesData).length > 0) {
     color = speciesData.color.name;
-    habitat = speciesData.habitat.name;
+    habitat = speciesData.habitat?.name;
     captureRate = normalizeCaptureRate(speciesData.capture_rate);
     shape = speciesData.shape.name;
     japaneseName = speciesData.names
@@ -110,52 +114,61 @@ const PokemonModal = props => {
         <section className={classes.section}>
           <h3 className={classes['section-header']}>About</h3>
           <table>
-            {getTableRow('Species', titleize(data.species.name))}
-            {color && getTableRow('Color', titleize(color))}
-            {habitat && getTableRow('Habitat', titleize(habitat))}
-            {shape && getTableRow('Shape', titleize(shape))}
-            {getTableRow('Types', types)}
-            {getTableRow('Abilities', abilities)}
-            {getTableRow('Height', computeHeightText(data.height))}
-            {getTableRow('Weight', computeWeightText(data.weight))}
-            {captureRate && getTableRow('Capture Rate', `${captureRate}%`)}
+            <tbody>
+              {generateTableRow('Species', titleize(data.species.name))}
+              {color && generateTableRow('Color', titleize(color))}
+              {habitat && generateTableRow('Habitat', titleize(habitat))}
+              {shape && generateTableRow('Shape', titleize(shape))}
+              {generateTableRow('Types', types)}
+              {generateTableRow('Abilities', abilities)}
+              {generateTableRow('Height', computeHeightText(data.height))}
+              {generateTableRow('Weight', computeWeightText(data.weight))}
+              {captureRate &&
+                generateTableRow('Capture Rate', `${captureRate}%`)}
+            </tbody>
           </table>
         </section>
         <section className={classes.section}>
           <h3 className={classes['section-header']}>Base Stats</h3>
           <table>
-            {getTableRow('HP', stats.hp, <PokemonStatBar value={stats.hp} />)}
-            {getTableRow(
-              'Attack',
-              stats.attack,
-              <PokemonStatBar value={stats.attack} />
-            )}
-            {getTableRow(
-              'Defense',
-              stats.defense,
-              <PokemonStatBar value={stats.defense} />
-            )}
-            {getTableRow(
-              'Special Attack',
-              stats['special-attack'],
-              <PokemonStatBar value={stats['special-attack']} />
-            )}
-            {getTableRow(
-              'Special Defense',
-              stats['special-defense'],
-              <PokemonStatBar value={stats['special-defense']} />
-            )}
-            {getTableRow(
-              'Speed',
-              stats.speed,
-              <PokemonStatBar value={stats.speed} />
-            )}
-            {getTableRow(
-              'Total',
-              <p>
-                <strong>{totalStats}</strong>
-              </p>
-            )}
+            <tbody>
+              {generateTableRow(
+                'HP',
+                stats.hp,
+                <PokemonStatBar value={stats.hp} />
+              )}
+              {generateTableRow(
+                'Attack',
+                stats.attack,
+                <PokemonStatBar value={stats.attack} />
+              )}
+              {generateTableRow(
+                'Defense',
+                stats.defense,
+                <PokemonStatBar value={stats.defense} />
+              )}
+              {generateTableRow(
+                'Special Attack',
+                stats['special-attack'],
+                <PokemonStatBar value={stats['special-attack']} />
+              )}
+              {generateTableRow(
+                'Special Defense',
+                stats['special-defense'],
+                <PokemonStatBar value={stats['special-defense']} />
+              )}
+              {generateTableRow(
+                'Speed',
+                stats.speed,
+                <PokemonStatBar value={stats.speed} />
+              )}
+              {generateTableRow(
+                'Total',
+                <p>
+                  <strong>{totalStats}</strong>
+                </p>
+              )}
+            </tbody>
           </table>
         </section>
         {description && (
