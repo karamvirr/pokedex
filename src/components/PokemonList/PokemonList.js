@@ -3,7 +3,12 @@ import PokemonCard from '../PokemonCard';
 
 const PokemonList = props => {
   const data = [];
-  for (let i = 1; i <= 151; i++) {
+
+  for (
+    let i = props.data.regionStartNumber;
+    i <= props.data.regionEndNumber;
+    i++
+  ) {
     data.push(
       <PokemonCard
         onShowModal={props.onShowModal}

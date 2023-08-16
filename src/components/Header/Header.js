@@ -1,11 +1,11 @@
+import RegionList from '../RegionList/RegionList';
 import classes from './Header.module.css';
 
-const Header = () => {
+const Header = props => {
   return (
     <header className={classes.Header}>
       <h1>Pokédex</h1>
-      <nav></nav>
-      <form>{/* Form to search for Pokemon will be here. */}</form>
+      <RegionList onRegionChange={props.onRegionChange} />
     </header>
   );
 };

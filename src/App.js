@@ -6,6 +6,10 @@ import { useState } from 'react';
 import PokemonModal from './components/PokemonModal/PokemonModal';
 
 const App = () => {
+  const [regionPokemonData, setRegionPokemonData] = useState({
+    regionStartNumber: 1,
+    regionEndNumber: 151
+  });
   const [modalData, setModalData] = useState({});
 
   const showModalHandler = pokemonData => {
@@ -14,6 +18,13 @@ const App = () => {
 
   const dismissModalHandler = () => {
     setModalData({});
+  };
+
+  const regionChangeHandler = (startNumber, endNumber) => {
+    setRegionPokemonData({
+      regionStartNumber: startNumber,
+      regionEndNumber: endNumber
+    });
   };
 
   const modalIsOpen = Object.keys(modalData).length > 0;
@@ -26,8 +37,11 @@ const App = () => {
           onClose={dismissModalHandler}
         />
       )}
-      <Header />
-      <PokemonList onShowModal={showModalHandler} />
+      <Header onRegionChange={regionChangeHandler} />
+      <PokemonList
+        data={regionPokemonData}
+        onShowModal={showModalHandler}
+      />
     </div>
   );
 };
