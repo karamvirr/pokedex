@@ -1,4 +1,6 @@
-# Pokédex
+<h1 align="center">
+  <img alt="Pokedex" src="https://ik.imagekit.io/hwyksvj4iv/pokedex_N_WgWrJK0s.png" width="250px" />
+</h1>
 
 <img width="1440" alt="Screenshot 2023-08-15 at 11 01 47 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/bdb7d7e9-bfb2-4f4a-9f96-7c8b4c736478">
 
