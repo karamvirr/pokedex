@@ -6,6 +6,10 @@
   A Pokédex implemented using React and the PokéAPI.
 </p>
 
+<p align="center">
+  <img src="https://github.com/karamvirr/pokedex/assets/21179214/0537fb70-83bc-4dfe-a2b4-88acd7e296d6" alt="animated" />
+</p>
+
 <img width="1440" alt="Screenshot 2023-08-19 at 1 51 35 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/88187d6b-b764-4be8-8512-bb39663fa024">
 
 <img width="1440" alt="Screenshot 2023-08-19 at 1 55 11 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/dc6984ab-8a3e-4839-a913-c24043ec068d">
