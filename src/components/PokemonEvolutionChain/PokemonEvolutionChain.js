@@ -7,6 +7,7 @@ const PokemonEvolutionChain = props => {
     <PokemonEvolutionChainItem
       name={evolution}
       key={evolution}
+      onModalSwap={props.onModalSwap}
     />
   ));
   const content = evolutionItemComponents.map((component, index) => {

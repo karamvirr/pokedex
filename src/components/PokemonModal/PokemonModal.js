@@ -20,13 +20,13 @@ import {
 
 const portalElement = document.getElementById('overlays');
 
-const generateTableRow = (label, ...args) => {
+const generateTableRow = (pokemonId, label, ...args) => {
   return (
     <tr>
       <td className={classes['row-label']}>{label}</td>
       {args.map(arg => (
         <td
-          key={arg}
+          key={`${pokemonId}-${arg}`}
           className={classes['row-data']}>
           {arg}
         </td>
@@ -140,7 +140,7 @@ const PokemonModal = props => {
           src={imageUrl}
           alt={`${data.name} sprite`}
         />
-        <h1>{titleize(data.name)}</h1>
+        <h1>{titleize(data.species.name)}</h1>
         {japaneseName && (
           <h2 className={classes['japanese-name']}>{japaneseName}</h2>
         )}
@@ -151,16 +151,29 @@ const PokemonModal = props => {
           <h3 className={classes['section-header']}>About</h3>
           <table>
             <tbody>
-              {generateTableRow('Species', titleize(data.species.name))}
-              {color && generateTableRow('Color', titleize(color))}
-              {habitat && generateTableRow('Habitat', titleize(habitat))}
-              {shape && generateTableRow('Shape', titleize(shape))}
-              {generateTableRow('Types', types)}
-              {generateTableRow('Abilities', abilities)}
-              {generateTableRow('Height', computeHeightText(data.height))}
-              {generateTableRow('Weight', computeWeightText(data.weight))}
+              {generateTableRow(
+                data.id,
+                'Species',
+                titleize(data.species.name)
+              )}
+              {color && generateTableRow(data.id, 'Color', titleize(color))}
+              {habitat &&
+                generateTableRow(data.id, 'Habitat', titleize(habitat))}
+              {shape && generateTableRow(data.id, 'Shape', titleize(shape))}
+              {generateTableRow(data.id, 'Types', types)}
+              {generateTableRow(data.id, 'Abilities', abilities)}
+              {generateTableRow(
+                data.id,
+                'Height',
+                computeHeightText(data.height)
+              )}
+              {generateTableRow(
+                data.id,
+                'Weight',
+                computeWeightText(data.weight)
+              )}
               {captureRate &&
-                generateTableRow('Capture Rate', `${captureRate}%`)}
+                generateTableRow(data.id, 'Capture Rate', `${captureRate}%`)}
             </tbody>
           </table>
         </section>
@@ -169,36 +182,43 @@ const PokemonModal = props => {
           <table>
             <tbody>
               {generateTableRow(
+                data.id,
                 'HP',
                 stats.hp,
                 <PokemonStatBar value={stats.hp} />
               )}
               {generateTableRow(
+                data.id,
                 'Attack',
                 stats.attack,
                 <PokemonStatBar value={stats.attack} />
               )}
               {generateTableRow(
+                data.id,
                 'Defense',
                 stats.defense,
                 <PokemonStatBar value={stats.defense} />
               )}
               {generateTableRow(
+                data.id,
                 'Special Attack',
                 stats['special-attack'],
                 <PokemonStatBar value={stats['special-attack']} />
               )}
               {generateTableRow(
+                data.id,
                 'Special Defense',
                 stats['special-defense'],
                 <PokemonStatBar value={stats['special-defense']} />
               )}
               {generateTableRow(
+                data.id,
                 'Speed',
                 stats.speed,
                 <PokemonStatBar value={stats.speed} />
               )}
               {generateTableRow(
+                data.id,
                 'Total',
                 <p>
                   <strong>{totalStats}</strong>
@@ -215,7 +235,12 @@ const PokemonModal = props => {
         {showEvolutionsData && (
           <section className={classes.section}>
             <h3 className={classes['section-header']}>Evolutions</h3>
-            {<PokemonEvolutionChain evolutions={evolutionData} />}
+            {
+              <PokemonEvolutionChain
+                onModalSwap={props.onModalSwap}
+                evolutions={evolutionData}
+              />
+            }
           </section>
         )}
       </div>

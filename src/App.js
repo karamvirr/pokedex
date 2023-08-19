@@ -26,6 +26,7 @@ const App = () => {
           <PokemonModal
             data={modalData}
             onClose={dismissModalHandler}
+            onModalSwap={showModalHandler}
           />
         )}
         <Header />

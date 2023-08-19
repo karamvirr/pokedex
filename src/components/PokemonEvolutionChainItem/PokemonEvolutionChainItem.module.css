@@ -9,6 +9,7 @@
 
 .pokemon-sprite {
   object-fit: contain;
+  cursor: pointer;
 }
 
 .sprite-label {

@@ -44,7 +44,7 @@ const dataReducer = (state, action) => {
   switch (action.type) {
     case 'INSERT_POKEMON_DATA':
       updatedState.regionData[region][data.id] = {};
-      updatedState.regionData[region][data.id].name = data.name;
+      updatedState.regionData[region][data.id].name = data.species.name;
       updatedState.regionData[region][data.id].pokemon_data = data;
 
       return updatedState;
@@ -131,9 +131,30 @@ const DataProvider = props => {
   const insertPokemonSpeciesDataHandler = data => {
     dispatch({
       type: 'INSERT_POKEMON_SPECIES_DATA',
-      region: region,
+      region: getRegionFromPokemonId(data.id),
       data: data
     });
+  };
+
+  const getRegionFromPokemonId = id => {
+    if (id >= 1 && id <= 151) {
+      return 'kanto';
+    } else if (id >= 152 && id <= 251) {
+      return 'johto';
+    } else if (id >= 252 && id <= 386) {
+      return 'hoenn';
+    } else if (id >= 387 && id <= 493) {
+      return 'sinnoh';
+    } else if (id >= 494 && id <= 649) {
+      return 'unova';
+    } else if (id >= 650 && id <= 721) {
+      return 'kalos';
+    } else if (id >= 722 && id <= 809) {
+      return 'alola';
+    } else if (id >= 810 && id <= 898) {
+      return 'galar';
+    }
+    return null; // should never happen
   };
 
   const insertPokemonEvolutionsDataHandler = data => {
@@ -144,22 +165,39 @@ const DataProvider = props => {
     return data.evolutionChains.find(chain => chain.includes(name));
   };
 
-  const regionData = data.regionData[region];
+  const regionData = data.regionData;
+
+  const find = value => {
+    // if key is a number, search by id, else search by name
+    const isKey = +value ? true : false;
+
+    for (const regionName in regionData) {
+      const region = regionData[regionName];
+      for (const pokemonId in region) {
+        if (isKey) {
+          if (+pokemonId === +value) {
+            return region[pokemonId];
+          }
+        } else {
+          if (region[pokemonId].name === value) {
+            return region[pokemonId];
+          }
+        }
+      }
+    }
+    return null;
+  };
 
   const pokemonDataFromId = id => {
-    return regionData[id]?.pokemon_data || null;
+    return find(id)?.pokemon_data || null;
   };
 
   const pokemonDataFromName = name => {
-    const pokemonId = Object.keys(regionData).find(
-      id => regionData[id].name === name
-    );
-
-    return pokemonDataFromId(pokemonId);
+    return find(name)?.pokemon_data || null;
   };
 
-  const speciesDataForPokemon = id => {
-    return regionData[id]?.pokemon_species_data || null;
+  const speciesDataFromId = id => {
+    return find(id)?.pokemon_species_data || null;
   };
 
   const ctx = {
@@ -170,7 +208,7 @@ const DataProvider = props => {
     pokemonDataFromId: pokemonDataFromId,
     pokemonDataFromName: pokemonDataFromName,
     pokemonEvolutionData: evolutionChainForPokemon,
-    pokemonSpeciesData: speciesDataForPokemon,
+    pokemonSpeciesData: speciesDataFromId,
     insertPokemonData: insertPokemonDataHandler,
     insertPokemonSpeciesData: insertPokemonSpeciesDataHandler,
     insertPokemonEvolutionsData: insertPokemonEvolutionsDataHandler

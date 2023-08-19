@@ -103,6 +103,22 @@ const decimetersToMeters = decimeters => {
   return decimeters / 10;
 };
 
+// determines if the word provided is an honorific, if it is
+// it returns true, otherwise it returns false.
+// generational honorifics are titles like Mr., Mrs., Ms., Jr., and Miss.
+//
+// @param {string} word - the word to check
+const isGenerationalHonorific = word => {
+  word = word.toLowerCase();
+  return (
+    word === 'mr' ||
+    word === 'mrs' ||
+    word === 'ms' ||
+    word === 'miss' ||
+    word === 'jr'
+  );
+};
+
 // capitalizes the first letter of the given text.
 //
 // @param {string} text - the text to capitalize
@@ -110,7 +126,16 @@ const titleize = text => {
   if (text === '') {
     return text;
   }
-  return text[0].toUpperCase() + text.slice(1);
+  return text
+    .split('-')
+    .map(word => {
+      let titleizedWord = word[0].toUpperCase() + word.slice(1);
+      if (isGenerationalHonorific(titleizedWord)) {
+        titleizedWord += '.';
+      }
+      return titleizedWord;
+    })
+    .join(' ');
 };
 
 // formats the id of the pokemon to be 4 digits long.

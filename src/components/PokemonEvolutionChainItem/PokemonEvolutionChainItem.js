@@ -16,6 +16,7 @@ const PokemonEvolutionChainItem = props => {
           className={classes['pokemon-sprite']}
           src={spriteUrl}
           alt={props.name}
+          onClick={() => props.onModalSwap(data)}
         />
       )}
       <p className={classes['sprite-label']}>{titleize(props.name)}</p>

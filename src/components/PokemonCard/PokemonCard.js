@@ -14,7 +14,7 @@ const PokemonCard = props => {
   const [image_url, setImageUrl] = useState('');
 
   const setStateFromData = pokemonData => {
-    setName(pokemonData.name);
+    setName(pokemonData.species.name);
     setTypes(pokemonData.types.map(type => type.type.name));
     setImageUrl(pokemonData.sprites.other['official-artwork'].front_default);
   };
