@@ -1,18 +1,21 @@
 import ReactDOM from 'react-dom';
 import classes from './PokemonModal.module.css';
-import { useState, useEffect } from 'react';
+import Backdrop from '../UI/Backdrop';
+import Overlay from '../UI/Overlay';
+import Card from '../UI/Card';
+import PokemonStatBar from '../PokemonStatBar/PokemonStatBar';
+import DataContext from '../../store/data-context';
+
+import { useState, useEffect, useContext } from 'react';
 import {
   titleize,
+  formatId,
   decimetersToMeters,
   decimetersToFeetAndInches,
   hectogramsToPounds,
   hectogramsToKilograms,
   normalizeCaptureRate
 } from '../../utils';
-import Backdrop from '../UI/Backdrop';
-import Overlay from '../UI/Overlay';
-import Card from '../UI/Card';
-import PokemonStatBar from '../PokemonStatBar/PokemonStatBar';
 
 const portalElement = document.getElementById('overlays');
 
@@ -44,16 +47,21 @@ const computeWeightText = hectograms => {
 
 const PokemonModal = props => {
   const data = props.data;
+  const ctx = useContext(DataContext);
+
+  const speciesData = ctx.pokemonSpeciesData(data.id);
 
   const [showShinySprite, setShowShinySprite] = useState(false);
-  const [speciesData, setSpeciesData] = useState({});
 
   useEffect(() => {
-    if (data.species?.url) {
+    if (speciesData) {
+      console.log('cache hit!');
+    } else {
       fetch(data.species.url)
         .then(response => response.json())
         .then(data => {
-          setSpeciesData(data);
+          console.log('fetched data from API!');
+          ctx.insertPokemonSpeciesData(data);
         })
         .catch(console.log);
     }
@@ -81,15 +89,19 @@ const PokemonModal = props => {
   let shape = null;
   let captureRate = null;
   let japaneseName = null;
+  let romajiName = null;
   let description = null;
-  if (Object.keys(speciesData).length > 0) {
+  if (speciesData) {
     color = speciesData.color.name;
     habitat = speciesData.habitat?.name;
     captureRate = normalizeCaptureRate(speciesData.capture_rate);
     shape = speciesData.shape.name;
-    japaneseName = speciesData.names
-      .filter(entry => entry.language.name === 'ja')
-      .pop().name;
+    japaneseName = speciesData.names.find(
+      entry => entry.language.name === 'ja'
+    ).name;
+    romajiName = speciesData.names.find(
+      entry => entry.language.name === 'roomaji'
+    ).name;
     description = speciesData.flavor_text_entries
       .filter(entry => entry.language.name === 'en')
       .pop().flavor_text;
@@ -98,7 +110,7 @@ const PokemonModal = props => {
   const modalOverlayContent = (
     <>
       <div className={classes.sprite}>
-        <p>#{data.id}</p>
+        <p className={classes['pokemon-id']}>{formatId(data.id)}</p>
         <img
           onClick={() => setShowShinySprite(previousState => !previousState)}
           className={classes['pokemon-sprite']}
@@ -109,6 +121,7 @@ const PokemonModal = props => {
         {japaneseName && (
           <h2 className={classes['japanese-name']}>{japaneseName}</h2>
         )}
+        {romajiName && <p className={classes['romaji-name']}>{romajiName}</p>}
       </div>
       <div className={classes.information}>
         <section className={classes.section}>

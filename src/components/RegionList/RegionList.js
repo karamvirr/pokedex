@@ -1,37 +1,29 @@
 import classes from './RegionList.module.css';
 import RegionListItem from '../RegionListItem';
-import { useState } from 'react';
+import DataContext from '../../store/data-context';
 
-const RegionList = props => {
-  const [selectedRegion, setSelectedRegion] = useState('Kanto');
+import { useContext } from 'react';
+import { REGIONS } from '../../utils';
+
+const RegionList = () => {
+  const ctx = useContext(DataContext);
+  const selectedRegion = ctx.region;
 
   const regionClickHandler = event => {
     const dataset = event.target.dataset;
-    setSelectedRegion(dataset.region);
-    props.onRegionChange(dataset.start, dataset.end);
+    ctx.updateRegion(dataset.region);
   };
 
-  const listData = [
-    { name: 'Kanto', start: 1, end: 151 },
-    { name: 'Johto', start: 152, end: 251 },
-    { name: 'Hoenn', start: 252, end: 386 },
-    { name: 'Sinnoh', start: 387, end: 493 },
-    { name: 'Unova', start: 494, end: 649 },
-    { name: 'Kalos', start: 650, end: 721 },
-    { name: 'Alola', start: 722, end: 809 },
-    { name: 'Galar', start: 810, end: 898 }
-  ].map(({ name, start, end }) => (
+  const regionListItems = REGIONS.map(region => (
     <RegionListItem
-      key={name}
-      name={name}
-      start={start}
-      end={end}
-      active={name === selectedRegion}
+      key={region}
+      name={region}
+      active={region === selectedRegion}
       onRegionChange={regionClickHandler}
     />
   ));
 
-  return <div className={classes.RegionList}>{listData}</div>;
+  return <div className={classes.RegionList}>{regionListItems}</div>;
 };
 
 export default RegionList;

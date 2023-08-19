@@ -1,14 +1,15 @@
 import classes from './PokemonList.module.css';
 import PokemonCard from '../PokemonCard';
+import DataContext from '../../store/data-context';
+
+import { useContext } from 'react';
 
 const PokemonList = props => {
-  const data = [];
+  const ctx = useContext(DataContext);
+  const bounds = ctx.pokemonRegionBounds;
 
-  for (
-    let i = props.data.regionStartNumber;
-    i <= props.data.regionEndNumber;
-    i++
-  ) {
+  const data = [];
+  for (let i = bounds.regionStartNumber; i <= bounds.regionEndNumber; i++) {
     data.push(
       <PokemonCard
         onShowModal={props.onShowModal}

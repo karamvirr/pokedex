@@ -73,6 +73,8 @@ const titleize = text => {
   return text[0].toUpperCase() + text.slice(1);
 };
 
+const formatId = id => `#${('' + id).padStart(4, '0')}`;
+
 // this function normalizes the capture rate to a percentage.
 // for the given capture rate, 255 is the highest capture rate, and
 // 0 is the lowest.
@@ -80,9 +82,22 @@ const normalizeCaptureRate = captureRate => {
   return ((captureRate / 255) * 100).toFixed(1);
 };
 
+const REGIONS = [
+  'kanto',
+  'johto',
+  'hoenn',
+  'sinnoh',
+  'unova',
+  'kalos',
+  'alola',
+  'galar'
+];
+
 export {
+  REGIONS,
   getTypeColor,
   titleize,
+  formatId,
   hectogramsToPounds,
   hectogramsToKilograms,
   decimetersToFeet,

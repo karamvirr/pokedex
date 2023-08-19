@@ -1,26 +1,38 @@
-import { useState, useEffect } from 'react';
-import { titleize, getTypeColor } from '../../utils';
-
 import classes from './PokemonCard.module.css';
 import Card from '../UI/Card';
+import DataContext from '../../store/data-context';
+
+import { useState, useEffect, useContext } from 'react';
+import { titleize, formatId, getTypeColor } from '../../utils';
 
 const PokemonCard = props => {
+  const ctx = useContext(DataContext);
+  const data = ctx.pokemonData(props.id);
+
   const [name, setName] = useState('');
   const [types, setTypes] = useState([]);
   const [image_url, setImageUrl] = useState('');
 
-  const [data, setData] = useState({});
+  const setStateFromData = pokemonData => {
+    setName(pokemonData.name);
+    setTypes(pokemonData.types.map(type => type.type.name));
+    setImageUrl(pokemonData.sprites.other['official-artwork'].front_default);
+  };
 
   useEffect(() => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${props.id}`)
-      .then(response => response.json())
-      .then(data => {
-        setName(data.name);
-        setTypes(data.types.map(type => type.type.name));
-        setImageUrl(data.sprites.other['official-artwork'].front_default);
-        setData(data);
-      })
-      .catch(console.log);
+    if (data) {
+      console.log('cache hit!');
+      setStateFromData(data);
+    } else {
+      fetch(`https://pokeapi.co/api/v2/pokemon/${props.id}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('fetched data from API!');
+          ctx.insertPokemonData(data);
+          setStateFromData(data);
+        })
+        .catch(console.log);
+    }
   }, []);
 
   const typeCards = types.map(type => (
@@ -39,7 +51,7 @@ const PokemonCard = props => {
         props.onShowModal(data);
       }}>
       <div className={classes.information}>
-        <p>#{props.id}</p>
+        <p>{formatId(props.id)}</p>
         <h2>{titleize(name)}</h2>
         <div className={classes.types}>{typeCards}</div>
       </div>
@@ -48,6 +60,7 @@ const PokemonCard = props => {
           className={classes['pokemon-sprite']}
           src={image_url}
           alt={`${name} sprite`}
+          loading='lazy'
         />
       </div>
     </Card>

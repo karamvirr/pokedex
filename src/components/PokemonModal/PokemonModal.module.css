@@ -15,6 +15,10 @@
   padding: 1em;
 }
 
+.pokemon-id {
+  font-weight: bold;
+}
+
 .sprite {
   justify-content: center;
   width: 40%;
@@ -26,11 +30,18 @@
   animation: breathing 5s infinite;
   cursor: pointer;
   padding: 1em;
+  height: 75%;
 }
 
 .japanese-name,
+.romaji-name,
 .description {
   color: gray;
+}
+
+.romaji-name {
+  font-style: italic;
+  font-size: 14px;
 }
 
 .row-label {
