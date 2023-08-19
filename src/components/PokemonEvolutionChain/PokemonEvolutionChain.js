@@ -3,11 +3,12 @@ import PokemonEvolutionChainItem from '../PokemonEvolutionChainItem';
 import { Fragment } from 'react';
 
 const PokemonEvolutionChain = props => {
-  const evolutionItemComponents = props.evolutions.map(evolution => (
+  const evolutionItemComponents = props.evolutions.map((evolution, index) => (
     <PokemonEvolutionChainItem
       name={evolution}
       key={evolution}
       onModalSwap={props.onModalSwap}
+      index={index}
     />
   ));
   const content = evolutionItemComponents.map((component, index) => {

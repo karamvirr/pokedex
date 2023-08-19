@@ -9,6 +9,9 @@ const PokemonEvolutionChainItem = props => {
   const data = ctx.pokemonDataFromName(props.name);
   const spriteUrl = data?.sprites?.front_default;
 
+  // calculate animation delay based on index
+  const delay = `${props.index * 0.2}s`;
+
   return (
     <div className={classes.PokemonEvolutionChainItem}>
       {spriteUrl && (
@@ -17,6 +20,7 @@ const PokemonEvolutionChainItem = props => {
           src={spriteUrl}
           alt={props.name}
           onClick={() => props.onModalSwap(data)}
+          style={{ animationDelay: delay }}
         />
       )}
       <p className={classes['sprite-label']}>{titleize(props.name)}</p>
