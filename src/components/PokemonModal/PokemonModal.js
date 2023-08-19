@@ -90,9 +90,12 @@ const PokemonModal = props => {
     }
   }, [data]);
 
-  const imageUrl = showShinySprite
+  let imageUrl = showShinySprite
     ? data.sprites.other['official-artwork'].front_shiny
     : data.sprites.other['official-artwork'].front_default;
+  if (!imageUrl) {
+    imageUrl = data.sprites.other['official-artwork'].front_default;
+  }
   const abilities = data.abilities
     .map(ability => titleize(ability.ability.name))
     .join(', ');
@@ -118,16 +121,16 @@ const PokemonModal = props => {
     color = speciesData.color.name;
     habitat = speciesData.habitat?.name;
     captureRate = normalizeCaptureRate(speciesData.capture_rate);
-    shape = speciesData.shape.name;
+    shape = speciesData.shape?.name;
     japaneseName = speciesData.names.find(
       entry => entry.language.name === 'ja'
     ).name;
     romajiName = speciesData.names.find(
       entry => entry.language.name === 'roomaji'
     ).name;
-    description = speciesData.flavor_text_entries
-      .filter(entry => entry.language.name === 'en')
-      .pop().flavor_text;
+    description = speciesData?.flavor_text_entries
+      ?.filter(entry => entry.language.name === 'en')
+      ?.pop()?.flavor_text;
   }
 
   const modalOverlayContent = (

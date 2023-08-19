@@ -31,7 +31,8 @@ const initialDataState = {
     unova: {},
     kalos: {},
     alola: {},
-    galar: {}
+    galar: {},
+    hisui: {}
   },
   evolutionChains: []
 };
@@ -117,6 +118,12 @@ const DataProvider = props => {
           regionEndNumber: 898
         });
         break;
+      case 'hisui':
+        setPokemonRegionBounds({
+          regionStartNumber: 899,
+          regionEndNumber: 1010
+        });
+        break;
     }
   }, [region]);
 
@@ -153,6 +160,8 @@ const DataProvider = props => {
       return 'alola';
     } else if (id >= 810 && id <= 898) {
       return 'galar';
+    } else if (id >= 899 && id <= 1010) {
+      return 'hisui';
     }
     return null; // should never happen
   };

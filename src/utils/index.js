@@ -10,7 +10,8 @@ const REGIONS = [
   'unova',
   'kalos',
   'alola',
-  'galar'
+  'galar',
+  'hisui'
 ];
 
 // returns a color that corresponds to the type of the pokemon
