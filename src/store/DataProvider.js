@@ -171,6 +171,9 @@ const DataProvider = props => {
   };
 
   const evolutionChainForPokemon = name => {
+    if (name === 'eevee') {
+      return [];
+    }
     return data.evolutionChains.find(chain => chain.includes(name));
   };
 

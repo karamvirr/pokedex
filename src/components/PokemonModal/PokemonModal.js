@@ -60,19 +60,26 @@ const PokemonModal = props => {
     if (evolutionData) {
       console.log('cache hit! - /evolution-chain');
     } else if (speciesData) {
-      fetch(speciesData?.evolution_chain.url)
-        .then(response => response.json())
-        .then(data => {
-          console.log('fetched data from API! - /evolution-chain');
-          const evolutions = [];
-          let chain = data.chain;
-          while (chain) {
-            evolutions.push(chain.species.name);
-            chain = chain.evolves_to[0];
-          }
-          ctx.insertPokemonEvolutionsData(evolutions);
-        })
-        .catch(console.log);
+      if (speciesData.evolves_from_species?.name === 'eevee') {
+        ctx.insertPokemonEvolutionsData(['eevee', data.name]);
+      } else {
+        fetch(speciesData?.evolution_chain.url)
+          .then(response => response.json())
+          .then(data => {
+            console.log('fetched data from API! - /evolution-chain');
+            const evolutions = [];
+            let chain = data.chain;
+            while (chain) {
+              if (chain.species.name === 'eevee') {
+                break;
+              }
+              evolutions.push(chain.species.name);
+              chain = chain.evolves_to[0];
+            }
+            ctx.insertPokemonEvolutionsData(evolutions);
+          })
+          .catch(console.log);
+      }
     }
   }, [speciesData]);
 
