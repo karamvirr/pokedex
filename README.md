@@ -2,9 +2,15 @@
   <img alt="Pokedex" src="https://ik.imagekit.io/hwyksvj4iv/pokedex_N_WgWrJK0s.png" width="250px" />
 </h1>
 
-<img width="1440" alt="Screenshot 2023-08-15 at 11 01 47 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/bdb7d7e9-bfb2-4f4a-9f96-7c8b4c736478">
+<p align="center">
+  A Pokédex implemented using React and the PokéAPI.
+</p>
 
-<img width="1423" alt="Screenshot 2023-08-13 at 5 12 28 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/8d6618c2-634f-4d14-b104-6625a80f2e5c">
+<img width="1440" alt="Screenshot 2023-08-19 at 1 51 35 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/88187d6b-b764-4be8-8512-bb39663fa024">
+
+<img width="1440" alt="Screenshot 2023-08-19 at 1 55 11 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/dc6984ab-8a3e-4839-a913-c24043ec068d">
+
+<img width="1440" alt="Screenshot 2023-08-19 at 1 56 59 PM" src="https://github.com/karamvirr/pokedex/assets/21179214/c1423118-ecd5-4f2e-b411-43781cb06b4c">
 
 ### Usage
 
