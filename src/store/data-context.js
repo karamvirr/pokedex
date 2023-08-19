@@ -4,11 +4,14 @@ const DataContext = React.createContext({
   data: {},
   region: 'kanto',
   pokemonRegionBounds: { regionStartNumber: 1, regionEndNumber: 151 },
-  pokemonData: id => {},
+  pokemonDataFromId: id => {},
+  pokemonDataFromName: name => {},
+  pokemonEvolutionData: name => {},
   pokemonSpeciesData: id => {},
   updateRegion: region => {},
   insertPokemonData: data => {},
-  insertPokemonSpeciesData: data => {}
+  insertPokemonSpeciesData: data => {},
+  insertPokemonEvolutionsData: data => {}
 });
 
 export default DataContext;

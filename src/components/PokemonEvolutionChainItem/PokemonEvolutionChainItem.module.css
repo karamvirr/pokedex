@@ -1,0 +1,17 @@
+.PokemonEvolutionChainItem {
+  --size: 85px;
+  width: var(--size);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.pokemon-sprite {
+  object-fit: contain;
+}
+
+.sprite-label {
+  font-size: 14px;
+  color: gray;
+}

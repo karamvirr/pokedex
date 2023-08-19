@@ -3,7 +3,8 @@ import classes from './PokemonModal.module.css';
 import Backdrop from '../UI/Backdrop';
 import Overlay from '../UI/Overlay';
 import Card from '../UI/Card';
-import PokemonStatBar from '../PokemonStatBar/PokemonStatBar';
+import PokemonStatBar from '../PokemonStatBar';
+import PokemonEvolutionChain from '../PokemonEvolutionChain';
 import DataContext from '../../store/data-context';
 
 import { useState, useEffect, useContext } from 'react';
@@ -50,17 +51,39 @@ const PokemonModal = props => {
   const ctx = useContext(DataContext);
 
   const speciesData = ctx.pokemonSpeciesData(data.id);
+  const evolutionData = ctx.pokemonEvolutionData(data.name);
+  const showEvolutionsData = evolutionData?.length > 1;
 
   const [showShinySprite, setShowShinySprite] = useState(false);
 
   useEffect(() => {
+    if (evolutionData) {
+      console.log('cache hit! - /evolution-chain');
+    } else if (speciesData) {
+      fetch(speciesData?.evolution_chain.url)
+        .then(response => response.json())
+        .then(data => {
+          console.log('fetched data from API! - /evolution-chain');
+          const evolutions = [];
+          let chain = data.chain;
+          while (chain) {
+            evolutions.push(chain.species.name);
+            chain = chain.evolves_to[0];
+          }
+          ctx.insertPokemonEvolutionsData(evolutions);
+        })
+        .catch(console.log);
+    }
+  }, [speciesData]);
+
+  useEffect(() => {
     if (speciesData) {
-      console.log('cache hit!');
+      console.log('cache hit! - /pokemon-species');
     } else {
       fetch(data.species.url)
         .then(response => response.json())
         .then(data => {
-          console.log('fetched data from API!');
+          console.log('fetched data from API! - /pokemon-species');
           ctx.insertPokemonSpeciesData(data);
         })
         .catch(console.log);
@@ -187,6 +210,12 @@ const PokemonModal = props => {
         {description && (
           <section className={classes.section}>
             <p className={classes.description}>{description}</p>
+          </section>
+        )}
+        {showEvolutionsData && (
+          <section className={classes.section}>
+            <h3 className={classes['section-header']}>Evolutions</h3>
+            {<PokemonEvolutionChain evolutions={evolutionData} />}
           </section>
         )}
       </div>

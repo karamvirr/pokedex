@@ -7,7 +7,7 @@ import { titleize, formatId, getTypeColor } from '../../utils';
 
 const PokemonCard = props => {
   const ctx = useContext(DataContext);
-  const data = ctx.pokemonData(props.id);
+  const data = ctx.pokemonDataFromId(props.id);
 
   const [name, setName] = useState('');
   const [types, setTypes] = useState([]);
@@ -21,13 +21,13 @@ const PokemonCard = props => {
 
   useEffect(() => {
     if (data) {
-      console.log('cache hit!');
+      console.log('cache hit! - /pokemon');
       setStateFromData(data);
     } else {
       fetch(`https://pokeapi.co/api/v2/pokemon/${props.id}`)
         .then(response => response.json())
         .then(data => {
-          console.log('fetched data from API!');
+          console.log('fetched data from API! - /pokemon');
           ctx.insertPokemonData(data);
           setStateFromData(data);
         })
